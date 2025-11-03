@@ -1,73 +1,76 @@
-# Initialize the availability of the rooms using a list
-import os
+# Simple Classroom Attendance System for Bright Minds Academy
 
-rooms = [
-    "Room 001", "Room 002", "Room 003", "Room 004",
-    "Room 005", "Room 006", "Room 007", "Room 008",
-    "Room 009", "Room 010"
+students = [
+    "Ali", "Sarah", "James", "Fatima", "Omar",
+    "Lucy", "David", "Mia", "Ahmed", "Emma"
 ]
 
-booked_status = [False] * len(rooms)  # Corresponding booking status for each room
+# False = absent, True = present
+present_status = [False] * len(students)
 
 while True:
     # Display the menu
-    print("\n--- Simple Hotel Room Booking System ---")
-    print("1. View Available Rooms")
-    print("2. Book a Room")
-    print("3. Checkout (Free a Room)")
+    print("\n--- Bright Minds Academy - Attendance System ---")
+    print("1. View Present Students")
+    print("2. Mark Student as Present")
+    print("3. Mark Student as Absent")
     print("4. Exit")
-    print("-----------------------------------------")
+    print("------------------------------------------------")
 
     # Get user choice
     choice = input("Enter your choice (1-4): ").strip()
 
-    # Handle each choice
+    # Option 1: View Present Students
     if choice == '1':
-        # View available rooms
-        print("\nAvailable Rooms:")
-        available = False  # To check if at least one room is available
+        print("\nStudents Marked Present:")
+        any_present = False
 
-        for i in range(len(rooms)):
-            if not booked_status[i]:
-                print(f"- {rooms[i]}")
-                available = True
+        for i in range(len(students)):
+            if present_status[i]:
+                print(f"- {students[i]}")
+                any_present = True
 
-        if not available:
-            print("No rooms available — all are currently booked.")
+        if not any_present:
+            print("No students are marked present yet.")
 
+        print("\nFull Summary:")
+        for i in range(len(students)):
+            status_text = "Present ✅" if present_status[i] else "Absent ❌"
+            print(f"{students[i]}: {status_text}")
+
+    # Option 2: Mark Student as Present
     elif choice == '2':
-        # Book a room
-        room_name = input("Enter the room name you want to book: ").strip().title()
+        name = input("Enter the student's name to mark present: ").strip().title()
 
-        if room_name in rooms:
-            index = rooms.index(room_name)
-            if not booked_status[index]:
-                booked_status[index] = True
-                print(f"You have successfully booked '{room_name}'.")
+        if name in students:
+            index = students.index(name)
+            if not present_status[index]:
+                present_status[index] = True
+                print(f"Attendance marked: {name} is now PRESENT.")
             else:
-                print(f"'{room_name}' is already booked.")
+                print(f"{name} is already marked present.")
         else:
-            print("Room not found. Please enter a valid room name.")
+            print("Student not found. Please enter a valid registered student name.")
 
+    # Option 3: Mark Student as Absent (undo present)
     elif choice == '3':
-        # Checkout (free a room)
-        room_name = input("Enter the room name you want to checkout (free): ").strip().title()
+        name = input("Enter the student's name to mark absent: ").strip().title()
 
-        if room_name in rooms:
-            index = rooms.index(room_name)
-            if booked_status[index]:
-                booked_status[index] = False
-                print(f"You have successfully checked out of '{room_name}'. It is now available.")
+        if name in students:
+            index = students.index(name)
+            if present_status[index]:
+                present_status[index] = False
+                print(f"{name} is now marked ABSENT.")
             else:
-                print(f"'{room_name}' was not booked.")
+                print(f"{name} was already marked absent.")
         else:
-            print("Room not found. Please enter a valid room name.")
+            print("Student not found. Please enter a valid registered student name.")
 
+    # Option 4: Exit
     elif choice == '4':
-        # Exit the system
-        print("Exiting the system. Thank you for using Bright Minds Hotel Booking!")
+        print("Closing attendance system. Have a great day!")
         break
 
+    # Invalid option
     else:
-        # Handle invalid choice
         print("Invalid choice. Please select a valid option (1-4).")
